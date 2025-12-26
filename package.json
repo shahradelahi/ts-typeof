@@ -1,6 +1,6 @@
 {
   "name": "@se-oss/typeof",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A robust utility for determining the runtime type of any JavaScript value.",
   "keywords": [
     "typeof",
