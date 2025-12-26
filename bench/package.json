@@ -7,12 +7,12 @@
     "bench": "vitest bench --run"
   },
   "devDependencies": {
-    "@se-oss/typeof": "link:../",
+    "@se-oss/typeof": "link:..",
     "@types/kind-of": "6.0.3",
     "kind-of": "6.0.3",
     "type-of": "2.0.1",
     "typeof": "1.0.0",
-    "vitest": "3.2.4"
+    "vitest": "4.0.16"
   },
-  "packageManager": "pnpm@10.18.2+sha512.9fb969fa749b3ade6035e0f109f0b8a60b5d08a1a87fdf72e337da90dcc93336e2280ca4e44f2358a649b83c17959e9993e777c2080879f3801e6f0d999ad3dd"
+  "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6"
 }
