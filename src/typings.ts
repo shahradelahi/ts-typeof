@@ -9,6 +9,8 @@ export type Type =
   | 'number'
   | 'symbol'
   | 'generatorfunction'
+  | 'asyncgeneratorfunction'
+  | 'asyncfunction'
   | 'function'
   | 'array'
   | 'buffer'
@@ -31,6 +33,7 @@ export type Type =
   | 'float32array'
   | 'float64array'
   | 'generator'
+  | 'asyncgenerator'
   | 'mapiterator'
   | 'setiterator'
   | 'stringiterator'
@@ -53,52 +56,58 @@ export type TypeOf<T> = T extends undefined
           ? 'number'
           : T extends symbol
             ? 'symbol'
-            : T extends (...args: any[]) => Generator
-              ? 'generatorfunction'
-              : T extends (...args: any[]) => any
-                ? 'function'
-                : T extends any[]
-                  ? 'array'
-                  : T extends Date
-                    ? 'date'
-                    : T extends RegExp
-                      ? 'regexp'
-                      : T extends Error
-                        ? 'error'
-                        : T extends Promise<any>
-                          ? 'promise'
-                          : T extends Map<any, any>
-                            ? 'map'
-                            : T extends Set<any>
-                              ? 'set'
-                              : T extends WeakMap<any, any>
-                                ? 'weakmap'
-                                : T extends WeakSet<any>
-                                  ? 'weakset'
-                                  : T extends Int8Array
-                                    ? 'int8array'
-                                    : T extends Uint8Array
-                                      ? T extends { readInt8: any }
-                                        ? 'buffer'
-                                        : 'uint8array'
-                                      : T extends Uint8ClampedArray
-                                        ? 'uint8clampedarray'
-                                        : T extends Int16Array
-                                          ? 'int16array'
-                                          : T extends Uint16Array
-                                            ? 'uint16array'
-                                            : T extends Int32Array
-                                              ? 'int32array'
-                                              : T extends Uint32Array
-                                                ? 'uint32array'
-                                                : T extends Float32Array
-                                                  ? 'float32array'
-                                                  : T extends Float64Array
-                                                    ? 'float64array'
-                                                    : T extends IArguments
-                                                      ? 'arguments'
-                                                      : T extends IterableIterator<any>
-                                                        ? 'generator'
-                                                        : T extends object
-                                                          ? 'object'
-                                                          : Type;
+            : T extends (...args: any[]) => AsyncGenerator
+              ? 'asyncgeneratorfunction'
+              : T extends (...args: any[]) => Generator
+                ? 'generatorfunction'
+                : T extends (...args: any[]) => Promise<any>
+                  ? 'asyncfunction'
+                  : T extends (...args: any[]) => any
+                    ? 'function'
+                    : T extends any[]
+                      ? 'array'
+                      : T extends Date
+                        ? 'date'
+                        : T extends RegExp
+                          ? 'regexp'
+                          : T extends Error
+                            ? 'error'
+                            : T extends Promise<any>
+                              ? 'promise'
+                              : T extends Map<any, any>
+                                ? 'map'
+                                : T extends Set<any>
+                                  ? 'set'
+                                  : T extends WeakMap<any, any>
+                                    ? 'weakmap'
+                                    : T extends WeakSet<any>
+                                      ? 'weakset'
+                                      : T extends Int8Array
+                                        ? 'int8array'
+                                        : T extends Uint8Array
+                                          ? T extends { readInt8: any }
+                                            ? 'buffer'
+                                            : 'uint8array'
+                                          : T extends Uint8ClampedArray
+                                            ? 'uint8clampedarray'
+                                            : T extends Int16Array
+                                              ? 'int16array'
+                                              : T extends Uint16Array
+                                                ? 'uint16array'
+                                                : T extends Int32Array
+                                                  ? 'int32array'
+                                                  : T extends Uint32Array
+                                                    ? 'uint32array'
+                                                    : T extends Float32Array
+                                                      ? 'float32array'
+                                                      : T extends Float64Array
+                                                        ? 'float64array'
+                                                        : T extends IArguments
+                                                          ? 'arguments'
+                                                          : T extends AsyncIterableIterator<any>
+                                                            ? 'asyncgenerator'
+                                                            : T extends IterableIterator<any>
+                                                              ? 'generator'
+                                                              : T extends object
+                                                                ? 'object'
+                                                                : Type;

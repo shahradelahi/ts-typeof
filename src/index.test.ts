@@ -61,8 +61,22 @@ describe('typeOf', () => {
     expect(typeOf(() => {})).toBe('function');
     expectTypeOf(typeOf(() => {})).toEqualTypeOf<'function'>();
 
+    expect(typeOf(async () => {})).toBe('asyncfunction');
+    expectTypeOf(typeOf(async () => {})).toEqualTypeOf<'asyncfunction'>();
+
     expect(typeOf(function* () {})).toBe('generatorfunction');
     expectTypeOf(typeOf(function* () {})).toEqualTypeOf<'generatorfunction'>();
+
+    expect(typeOf(async function* () {})).toBe('asyncgeneratorfunction');
+    expectTypeOf(typeOf(async function* () {})).toEqualTypeOf<'asyncgeneratorfunction'>();
+  });
+
+  it('should return the correct type for generators', () => {
+    expect(typeOf((function* () {})())).toBe('generator');
+    expectTypeOf(typeOf((function* () {})())).toEqualTypeOf<'generator'>();
+
+    expect(typeOf((async function* () {})())).toBe('asyncgenerator');
+    expectTypeOf(typeOf((async function* () {})())).toEqualTypeOf<'asyncgenerator'>();
   });
 
   it('should return the correct type for typed arrays', () => {
@@ -133,6 +147,9 @@ describe('typeOf', () => {
       expectTypeOf<TypeOf<Promise<any>>>().toEqualTypeOf<'promise'>();
       expectTypeOf<TypeOf<Map<any, any>>>().toEqualTypeOf<'map'>();
       expectTypeOf<TypeOf<Set<any>>>().toEqualTypeOf<'set'>();
+      expectTypeOf<TypeOf<() => Promise<void>>>().toEqualTypeOf<'asyncfunction'>();
+      expectTypeOf<TypeOf<() => Generator>>().toEqualTypeOf<'generatorfunction'>();
+      expectTypeOf<TypeOf<() => AsyncGenerator>>().toEqualTypeOf<'asyncgeneratorfunction'>();
     });
   });
 });

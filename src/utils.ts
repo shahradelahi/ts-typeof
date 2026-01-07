@@ -72,6 +72,14 @@ export function isGeneratorFn(fn: unknown): boolean {
   return ctorName(fn) === 'GeneratorFunction';
 }
 
+export function isAsyncFn(fn: unknown): boolean {
+  return ctorName(fn) === 'AsyncFunction';
+}
+
+export function isAsyncGeneratorFn(fn: unknown): boolean {
+  return ctorName(fn) === 'AsyncGeneratorFunction';
+}
+
 export function isGeneratorObj(v: unknown): boolean {
   return !!(
     v &&

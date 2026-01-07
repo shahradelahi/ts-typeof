@@ -2,6 +2,8 @@ import type { TypeOf } from './typings';
 import {
   ctorName,
   isArguments,
+  isAsyncFn,
+  isAsyncGeneratorFn,
   isBuffer,
   isDate,
   isError,
@@ -15,7 +17,7 @@ import {
  * Returns a lowercase string describing the precise runtime type of `val`.
  *
  * This function provides a more granular type detection than the built-in `typeof` operator,
- * handling primitives, built-in objects (Date, RegExp, Map, etc.), and environment-specific
+ * handling primitives, built-ins (Date, RegExp, Map, etc.), and environment-specific
  * types like Node.js Buffers.
  *
  * @template T - The type of the value being inspected.
@@ -29,7 +31,7 @@ import {
  * typeOf([])                // 'array'
  * typeOf(new Date())        // 'date'
  * typeOf(/abc/)             // 'regexp'
- * typeOf(async () => {})    // 'function'
+ * typeOf(async () => {})    // 'asyncfunction'
  * typeOf(Buffer.from(''))   // 'buffer'
  * ```
  */
@@ -38,7 +40,7 @@ export function typeOf<T>(val: T): TypeOf<T> {
   if (val === null) return 'null' as TypeOf<T>;
 
   const t = typeof val;
-  // fast path for primitives + function/generatorfunction
+  // fast path for primitives + function types
   switch (t) {
     case 'boolean':
       return 'boolean' as TypeOf<T>;
@@ -48,8 +50,12 @@ export function typeOf<T>(val: T): TypeOf<T> {
       return 'number' as TypeOf<T>;
     case 'symbol':
       return 'symbol' as TypeOf<T>;
-    case 'function':
-      return (isGeneratorFn(val) ? 'generatorfunction' : 'function') as TypeOf<T>;
+    case 'function': {
+      if (isGeneratorFn(val)) return 'generatorfunction' as TypeOf<T>;
+      if (isAsyncGeneratorFn(val)) return 'asyncgeneratorfunction' as TypeOf<T>;
+      if (isAsyncFn(val)) return 'asyncfunction' as TypeOf<T>;
+      return 'function' as TypeOf<T>;
+    }
   }
 
   if (Array.isArray(val)) return 'array' as TypeOf<T>;
@@ -95,7 +101,10 @@ export function typeOf<T>(val: T): TypeOf<T> {
     }
   }
 
-  if (isGeneratorObj(val)) return 'generator' as TypeOf<T>;
+  if (isGeneratorObj(val)) {
+    if (nameOf.call(val) === '[object AsyncGenerator]') return 'asyncgenerator' as TypeOf<T>;
+    return 'generator' as TypeOf<T>;
+  }
 
   // fallback to Object.prototype.toString for exotic built-ins and iterators
   const name = nameOf.call(val);
